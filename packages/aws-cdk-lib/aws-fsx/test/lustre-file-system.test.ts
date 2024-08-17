@@ -127,6 +127,24 @@ describe('FSx for Lustre File System', () => {
     Template.fromStack(stack).hasResourceProperties('AWS::EC2::SecurityGroup', {});
   });
 
+  test('file system is tagged correctly', () => {
+    lustreConfiguration = {
+      deploymentType: LustreDeploymentType.SCRATCH_2,
+    };
+
+    new LustreFileSystem(stack, 'FsxFileSystem', {
+      lustreConfiguration,
+      storageCapacityGiB: storageCapacity,
+      vpc,
+      vpcSubnet,
+      tags: [{ key: 'custom key', value: 'custom value' }]
+    });
+
+    Template.fromStack(stack).hasResourceProperties('AWS::FSx::FileSystem', {
+      Tags: [{ Key: 'custom key', Value: 'custom value' }],
+    });
+  });
+
   describe('when validating props', () => {
     describe('exportPath', () => {
       test('export path valid', () => {
