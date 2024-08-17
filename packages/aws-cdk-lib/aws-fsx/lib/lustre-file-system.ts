@@ -4,7 +4,7 @@ import { FileSystemAttributes, FileSystemBase, FileSystemProps, IFileSystem } fr
 import { CfnFileSystem } from './fsx.generated';
 import { LustreMaintenanceTime } from './maintenance-time';
 import { Connections, ISecurityGroup, ISubnet, Port, SecurityGroup } from '../../aws-ec2';
-import { Aws, Duration, Token } from '../../core';
+import { Aws, Duration, Token, CfnTag } from '../../core';
 
 /**
  * The different kinds of file system deployments used by Lustre.
@@ -185,6 +185,13 @@ export interface LustreFileSystemProps extends FileSystemProps {
    * The subnet that the file system will be accessible from.
    */
   readonly vpcSubnet: ISubnet;
+
+  /**
+ * The tags of the file system
+ *
+ * @default - no tags
+ */
+  readonly tags?: CfnTag[];
 }
 
 /**
@@ -289,6 +296,7 @@ export class LustreFileSystem extends FileSystemBase {
       lustreConfiguration,
       securityGroupIds: [securityGroup.securityGroupId],
       storageCapacity: props.storageCapacityGiB,
+      tags: props.tags
     });
     this.fileSystem.applyRemovalPolicy(props.removalPolicy);
 
