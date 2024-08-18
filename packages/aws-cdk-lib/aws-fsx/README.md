@@ -52,6 +52,16 @@ const fileSystem = new fsx.LustreFileSystem(this, 'FsxLustreFileSystem', {
 });
 ```
 
+### Tags
+
+You can optionally categorize the Lustre file system with tags. Each tag entry must consist of a key and a value.
+
+```ts
+import * as cdk from 'aws-cdk-lib';
+
+const tags: cdk.CfnTag[] = [{ key: 'env', value: 'prod' }];
+```
+
 ### Connecting
 
 To control who can access the file system, use the `.connections` attribute. FSx has a fixed default port, so you don't
